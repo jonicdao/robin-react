@@ -58,7 +58,7 @@ const App = () => {
     { data: [], isLoading: false, isError: false }
   );
 
-  React.useEffect(() => {
+  const handleFetchStories = React.useCallback(() => {
     if (!searchTerm) return;
 
     dispatchStories({ type: 'STORIES_FETCH_INIT' });
@@ -76,6 +76,10 @@ const App = () => {
       );
   }, [searchTerm]);
 
+  React.useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);
+
   const handleRemoveStory = item => {
     dispatchStories({
       type: 'REMOVE_STORY',
@@ -86,8 +90,6 @@ const App = () => {
   const handleSearch = event => {
     setSearchTerm(event.target.value);
   };
-
-
 
   return (
     <div>
@@ -109,10 +111,7 @@ const App = () => {
       {stories.isLoading ? (
         <p>Loading ...</p>
       ) : (
-        <List
-          list={stories.data}
-          onRemoveItem={handleRemoveStory}
-        />
+        <List list={stories.data} onRemoveItem={handleRemoveStory} />
       )}
     </div>
   );
